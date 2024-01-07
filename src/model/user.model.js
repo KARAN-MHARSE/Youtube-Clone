@@ -47,7 +47,7 @@ const userSchema = new mongoose.Schema({
 }
 ) 
 
-userSchema.pre("Save",async function(){
+userSchema.pre("save",async function(next){
     if(!this.isModified("password")){
         next()
     }

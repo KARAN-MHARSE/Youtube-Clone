@@ -1,14 +1,18 @@
 const express = require('express')
 const dotenv = require('dotenv')
+const cookieParser = require('cookie-parser')
+dotenv.config()
 const {connection} = require('./src/db/connection')
 const UserRoute = require('./src/routes/user.route')
 
 
 const app = express()
-dotenv.config()
+
+
 
 // middleware
 app.use(express.json())
+app.use(cookieParser())
 
 // Global error handling
 app.use((error,req,res,next)=>{
