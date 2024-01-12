@@ -43,9 +43,7 @@ const uploadVideo = asyncHandler(async(req,res)=>{
 
 // Get Specfic video
 const getVideoById = asyncHandler(async(req,res)=>{
-    console.log(req.body)
-    const {videoId} = req.body
-    console.log(videoId)
+    const {videoId} = req.params
 
     const video = await Video.findById(videoId)
     if(!video){
@@ -57,4 +55,48 @@ const getVideoById = asyncHandler(async(req,res)=>{
     .json(video)
 })
 
-module.exports = {uploadVideo,getVideoById}
+const updateVideo = asyncHandler(async(req,res)=>{
+    const {videoId} = req.params
+    const {title, description} = req.body
+
+    if(!videoId){
+        throw new ApiError(400,"Video not exist")
+    }
+    if(!title || !description){
+        throw new ApiError(400,'Title and description required')
+    }
+
+    const thumbnailLocalPath = req.file?.path
+    if(!thumbnailLocalPath){
+        throw new ApiError(500,"Thumbnail file is required")
+    }
+
+    // const prevVideoDetail = await Video.findById(videoId)
+    // console.log(req.user?._id)
+    // if(prevVideoDetail.owner != req.user?._id){
+    //     throw new ApiError(500,"You are not authorised to update details")
+    // }
+
+    const video = await Video.findByIdAndUpdate(
+        videoId,
+        {
+            $set:{
+                title:title,
+                description,
+                thumbnail:thumbnailLocalPath
+            }
+        },
+        {new:true}
+    )
+
+    if(!video){
+        throw new ApiError(400,"No such video")
+    }
+    return res
+    .status(200)
+    .json(video)
+})
+
+
+
+module.exports = {uploadVideo,getVideoById,updateVideo}
