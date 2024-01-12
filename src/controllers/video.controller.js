@@ -42,10 +42,19 @@ const uploadVideo = asyncHandler(async(req,res)=>{
 })
 
 // Get Specfic video
-// const getVideoById = asyncHandler(async(req,res)=>{
-//     const {videoId} = req.body
+const getVideoById = asyncHandler(async(req,res)=>{
+    console.log(req.body)
+    const {videoId} = req.body
+    console.log(videoId)
 
-//     const video = await Video.findById(videoId).
-// })
+    const video = await Video.findById(videoId)
+    if(!video){
+        throw new ApiError(400,"Video is not exist")
+    }
 
-module.exports = {uploadVideo}
+    return res
+    .status(201)
+    .json(video)
+})
+
+module.exports = {uploadVideo,getVideoById}
