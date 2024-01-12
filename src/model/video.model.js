@@ -20,7 +20,7 @@ const videoSchema = new mongoose.Schema({
     },
     duration:{
         type:Number,
-        required:true
+        required:false
     },
     views:{
         type:Number,
@@ -39,3 +39,5 @@ const videoSchema = new mongoose.Schema({
 {
     timestamps:true
 })
+
+module.exports = mongoose.model("Video",videoSchema)

@@ -175,10 +175,73 @@ const updateAvatar = asyncHandler(async(req,res)=>{
     })
 })
 
+const getChannelInfo = asyncHandler(async(req,res)=>{
+    const channelName = req.params.userName;
+    if(!channelId){
+        throw new ApiError(400,"Channel name not exist")
+    }
+     const channel = await User.aggregate([
+        {
+            $match:{
+                userName: channelName.toLowerCase()
+            }
+        },
+        {
+            $lookup:{
+                from:"suscriptions",
+                localField:"_id",
+                foreignField:"channel",
+                as: "subscribers"
+            }
+        },
+        {
+            $lookup:{
+                from:"suscriptions",
+                localField:"_id",
+                foreignField:"subscriber",
+                as:"subscribedTo"
+            }
+        },
+        {
+            $addFields:{
+                subscibersCount: {
+                    $size:"$subscribers"
+                },
+                channelSubscribedTo:{
+                    $size:"$subscribedTo"
+                },
+                isSubscribed:{
+                    $condition:{
+                        if:{$in: [req.user?._id,"$subscribers"]},
+                        then : true,
+                        else: false
+                    }
+                }
+            }
+        },
+        {
+            $project:{
+                fullName:1,
+                userName:1,
+                avatar:1,
+                subscibersCount:1,
+                channelSubscribedTo:1,
+                isSubscribed:1,
+                email:1
+            }
+        }
+     ])
+
+     return res
+     .status(200)
+     .json( channel)
+})
+
 module.exports = {
     userRegister,
     userLogin,
     userLogout,
     changeCurrentPassword,
-    updateAvatar
+    updateAvatar,
+    getChannelInfo
 }

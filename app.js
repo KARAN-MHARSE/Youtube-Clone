@@ -4,6 +4,7 @@ const cookieParser = require('cookie-parser')
 dotenv.config()
 const {connection} = require('./src/db/connection')
 const UserRoute = require('./src/routes/user.route')
+const VideoRoute = require('./src/routes/video.route')
 
 
 const app = express()
@@ -25,6 +26,7 @@ app.use((error,req,res,next)=>{
 
 // Routes Declare
 app.use('/api/v1/user',UserRoute)
+app.use('/api/v1/video',VideoRoute)
 
 
 // Variables
