@@ -9,12 +9,7 @@ Project uses all standard practices like JWT, bcrypt, access tokens, refresh Tok
 - [Features](#features)
 - [Prerequisites](#prerequisites)
 - [Getting Started](#getting-started)
-- [Usage](#usage)
-- [Project Structure](#project-structure)
-- [Technologies Used](#technologies-used)
-- [Dependencies](#dependencies)
-- [Contributing](#contributing)
-- [License](#license)
+- [Dependencies](#Dependencies)
 
 ## Features
 1. **User Authentication:**
